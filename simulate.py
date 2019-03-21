@@ -102,18 +102,47 @@ def run_simulation(strategy, simulations):
 	if not os.path.exists('exports'):
 		os.mkdir('exports')
 
-	with open('exports/results-' + strategy + '_odds-' + str(simulations) + '_sims.csv', 'w') as output:
-		writer = csv.writer(output, lineterminator='\n')
-		writer.writerow(['id','round','team_1','team_1_seed','team_2','team_2_seed','team_1_score','team_2_score','winner', 'upset'])
+	this_round = -1
+	with open('exports/results-' + strategy + '_odds-' + str(simulations) + '_sims.txt', 'w') as text_file:
 
 		for matchup in matchups:
-			writer.writerow([matchup.id, matchup.rnd, matchup.team_1.name, matchup.team_1.seed, matchup.team_2.name, matchup.team_2.seed, matchup.team_1_score, matchup.team_2_score, matchup.winner.name, matchup.upset])
+
+			if matchup.rnd != this_round:
+				this_round = matchup.rnd
+
+				if this_round > 0:
+					text_file.write('\n\n')
+
+				text_file.write('Round of ' + str(int(64 / math.pow(2, this_round))) + '\n-----\n')
+
+			if matchup.winner.name == matchup.team_1.name:
+
+				if matchup.upset:
+					text_file.write('(' + str(matchup.team_1.seed) + ') ' + matchup.team_1.name + ' upsets (' + str(matchup.team_2.seed) + ') ' + matchup.team_2.name + ' -- ' + str(matchup.team_1_score) + '-' + str(matchup.team_2_score) + '\n')
+
+				else:
+					text_file.write('(' + str(matchup.team_1.seed) + ') ' + matchup.team_1.name + ' defeats (' + str(matchup.team_2.seed) + ') ' + matchup.team_2.name + ' -- ' + str(matchup.team_1_score) + '-' + str(matchup.team_2_score) + '\n')
+
+			else:
+
+				if matchup.upset:
+					text_file.write('(' + str(matchup.team_2.seed) + ') ' + matchup.team_2.name + ' upsets (' + str(matchup.team_1.seed) + ') ' + matchup.team_1.name + ' -- ' + str(matchup.team_2_score) + '-' + str(matchup.team_1_score) + '\n')
+
+				else:
+					text_file.write('(' + str(matchup.team_2.seed) + ') ' + matchup.team_2.name + ' defeats (' + str(matchup.team_1.seed) + ') ' + matchup.team_1.name + ' -- ' + str(matchup.team_2_score) + '-' + str(matchup.team_1_score) + '\n')
 
 			if str(matchup.rnd) in stats:
 				stats[str(matchup.rnd)] = [stats[str(matchup.rnd)][0] + 1, stats[str(matchup.rnd)][1] + 1] if matchup.upset else [stats[str(matchup.rnd)][0] + 1, stats[str(matchup.rnd)][1]]
 
 			else:
 				stats[str(matchup.rnd)] = [1, 1] if matchup.upset else [1, 0]
+
+		text_file.write('\n--------------------\n\nSummary\n-----\n')
+
+		for key in stats:
+			text_file.write('Round ' + key + ': ' + str(stats[key][1]) + ' upsets in ' + str(stats[key][0]) + ' games.\n')
+
+		text_file.write('\nTournament Champion: ' + matchups[len(matchups) - 1].winner.name + '\n')
 
 	print('')
 

@@ -18,7 +18,7 @@ I suggest just slamming around in Terminal until you see an upset distribution t
 
 ![Screenshot of Terminal](assets/terminal.png?raw=true)
 
-When you're ready to fill out your bracket, the full results of each simulation are saved in project's `exports/` directory, following the format `results-[seed|team|hybrid]_odds-[# of simulations]_sims.csv`.
+When you're ready to fill out your bracket, the full results of your simulation are saved in the project's `exports/` directory, following the format `results-[seed|team|hybrid]_odds-[# of simulations]_sims.txt`.
 
 ![Screenshot of Sublime](assets/sublime.png?raw=true)
 
