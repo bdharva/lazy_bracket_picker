@@ -16,10 +16,10 @@ Larger numbers will follow the odds more closely, while fewer simulation will in
 
 I suggest just slamming around in Terminal until you see an upset distribution that you like and a champion you can live with:
 
-![Screenshot of Terminal](data/assets/terminal.png?raw=true)
+![Screenshot of Terminal](assets/terminal.png?raw=true)
 
 When you're ready to fill out your bracket, the full results of each simulation are saved in project's `exports/` directory, following the format `results-[seed|team|hybrid]_odds-[# of simulations]_sims.csv`.
 
-![Screenshot of Sublime](data/assets/sublime.png?raw=true)
+![Screenshot of Sublime](assets/sublime.png?raw=true)
 
 Enjoy.
