@@ -1,5 +1,6 @@
 import csv
 import math
+import os
 import random
 import sys
 import datetime
@@ -98,6 +99,9 @@ def run_simulation(strategy, simulations):
 			matchups.append(Matchup(row[0], row[1], matchups[int(row[2])].winner, matchups[int(row[3])].winner, strategy, simulations))
 
 	stats = {}
+
+	if not os.path.exists('exports'):
+		os.mkdir('exports')
 
 	with open('exports/results-' + strategy + '_odds-' + str(simulations) + '_sims.csv', 'w') as output:
 		writer = csv.writer(output, lineterminator='\n')
