@@ -3,7 +3,6 @@ import math
 import os
 import random
 import sys
-import datetime
 
 team_odds = {}
 seed_odds = {}
