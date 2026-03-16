@@ -280,110 +280,147 @@ def index():
 
 
 HTML = r"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lazy Bracket Optimizer</title>
 <script src="https://cdn.plot.ly/plotly-2.35.0.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
-  :root {
-    --bg: #0a0e1a;
-    --surface: #111827;
-    --surface2: #1a2236;
-    --surface3: #1f2b3d;
-    --border: rgba(209,171,100,0.12);
-    --border-bright: rgba(209,171,100,0.25);
-    --text: #e8e2d6;
-    --text2: #7a7568;
-    --text3: #4a453d;
-    --amber: #d1ab64;
-    --amber-dim: #a08240;
-    --amber-bright: #f0d080;
-    --court: #c4903a;
-    --cyan: #4dd8c0;
-    --cyan-dim: rgba(77,216,192,0.15);
-    --red: #e85d5d;
-    --red-dim: rgba(232,93,93,0.1);
-    --blue: #5b8def;
+  [data-theme="dark"] {
+    --bg: #1a1a1a;
+    --surface: #232323;
+    --surface2: #2c2c2c;
+    --surface3: #363636;
+    --border: rgba(160,145,125,0.14);
+    --border-bright: rgba(160,145,125,0.28);
+    --text: #ddd8d0;
+    --text2: #888078;
+    --text3: #585450;
+    --amber: #b08050;
+    --amber-dim: #906840;
+    --amber-bright: #c89868;
+    --cyan: #5aaa98;
+    --cyan-dim: rgba(90,170,152,0.12);
+    --red: #c86050;
+    --red-dim: rgba(200,96,80,0.10);
+    --blue: #6090c0;
+    --purple: #9878b8;
+    --plot-bg: rgba(35,35,35,0.5);
+    --plot-grid: rgba(160,145,125,0.07);
+    --hover-bg: #232323;
+    --overlay-glow: rgba(160,145,125,0.06);
+  }
+  [data-theme="light"] {
+    --bg: #edebe6;
+    --surface: #f8f6f2;
+    --surface2: #e6e3dc;
+    --surface3: #dbd8d0;
+    --border: rgba(100,90,75,0.14);
+    --border-bright: rgba(100,90,75,0.25);
+    --text: #2a2520;
+    --text2: #706860;
+    --text3: #a09888;
+    --amber: #906838;
+    --amber-dim: #785830;
+    --amber-bright: #a87848;
+    --cyan: #3a8878;
+    --cyan-dim: rgba(58,136,120,0.10);
+    --red: #a84838;
+    --red-dim: rgba(168,72,56,0.08);
+    --blue: #4870a0;
+    --purple: #705898;
+    --plot-bg: rgba(248,246,242,0.5);
+    --plot-grid: rgba(100,90,75,0.07);
+    --hover-bg: #f8f6f2;
+    --overlay-glow: rgba(100,90,75,0.04);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace;
     background: var(--bg);
     color: var(--text);
     height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-  }
-
-  /* === GRAIN OVERLAY === */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    opacity: 0.03;
-    pointer-events: none;
-    z-index: 9999;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    transition: background 0.3s, color 0.3s;
   }
 
   /* === HEADER === */
   .header {
     position: relative;
-    padding: 20px 32px 16px;
+    padding: 16px 28px 14px;
     display: flex;
-    align-items: baseline;
-    gap: 20px;
+    align-items: center;
+    gap: 16px;
     border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(209,171,100,0.04) 0%, transparent 100%);
+    flex-shrink: 0;
   }
   .header::after {
     content: '';
     position: absolute;
     bottom: -1px;
-    left: 32px;
-    width: 120px;
-    height: 2px;
+    left: 28px;
+    width: 100px;
+    height: 1px;
     background: linear-gradient(90deg, var(--amber), transparent);
   }
   .logo {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: 10px;
   }
   .logo-icon {
-    font-size: 14px;
     color: var(--amber);
-    opacity: 0.8;
-    letter-spacing: 2px;
+    font-size: 16px;
+    opacity: 0.7;
   }
   .header h1 {
-    font-family: 'Outfit', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    text-transform: uppercase;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
     color: var(--text);
   }
   .header h1 span {
     color: var(--amber);
-    font-weight: 300;
-    font-size: 20px;
-    letter-spacing: 2px;
+    font-weight: 400;
   }
   .header-sub {
     font-size: 10px;
-    color: var(--text2);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    color: var(--text3);
+    letter-spacing: 1px;
   }
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text2);
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .theme-toggle:hover { border-color: var(--amber-dim); color: var(--amber); }
 
   /* === CONTROLS === */
   .controls {
@@ -393,7 +430,7 @@ HTML = r"""<!DOCTYPE html>
     border-bottom: 1px solid var(--border);
     align-items: flex-end;
     flex-wrap: wrap;
-    background: rgba(17,24,39,0.6);
+    background: var(--surface);
   }
   .control-group {
     display: flex;
@@ -401,7 +438,7 @@ HTML = r"""<!DOCTYPE html>
     gap: 5px;
   }
   .control-group > label {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -414,7 +451,7 @@ HTML = r"""<!DOCTYPE html>
     color: var(--text);
     padding: 9px 14px;
     border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
     width: 110px;
     outline: none;
@@ -433,7 +470,7 @@ HTML = r"""<!DOCTYPE html>
     color: var(--text);
     padding: 9px 14px;
     border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
     cursor: pointer;
     min-width: 280px;
@@ -475,7 +512,7 @@ HTML = r"""<!DOCTYPE html>
     color: var(--text);
     padding: 7px 10px;
     border-radius: 3px;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
     outline: none;
   }
@@ -507,7 +544,7 @@ HTML = r"""<!DOCTYPE html>
     margin-top: 4px;
   }
   .homer-tag {
-    background: linear-gradient(135deg, var(--amber-dim), var(--court));
+    background: linear-gradient(135deg, var(--amber-dim), var(--amber));
     color: var(--bg);
     padding: 2px 10px;
     border-radius: 2px;
@@ -515,7 +552,7 @@ HTML = r"""<!DOCTYPE html>
     font-weight: 600;
     cursor: pointer;
     transition: opacity 0.15s;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     letter-spacing: 0.5px;
   }
   .homer-tag:hover { opacity: 0.7; }
@@ -529,7 +566,7 @@ HTML = r"""<!DOCTYPE html>
     padding: 9px 28px;
     height: 36px;
     border-radius: 4px;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
@@ -542,9 +579,10 @@ HTML = r"""<!DOCTYPE html>
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, var(--amber), var(--court));
+    background: var(--amber);
     opacity: 0;
     transition: opacity 0.2s;
+    border-radius: inherit;
   }
   .btn-generate:hover { color: var(--bg); border-color: var(--amber); }
   .btn-generate:hover::before { opacity: 1; }
@@ -563,6 +601,7 @@ HTML = r"""<!DOCTYPE html>
     padding: 12px 16px 16px;
     min-width: 0;
     position: relative;
+    touch-action: pan-x pan-y;
   }
   .chart-panel::before {
     content: '';
@@ -601,7 +640,7 @@ HTML = r"""<!DOCTYPE html>
   .detail-panel.collapsed .detail-inner { opacity: 0; }
 
   .detail-panel .section-label {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 3px;
@@ -636,20 +675,20 @@ HTML = r"""<!DOCTYPE html>
     pointer-events: none;
   }
   .champ-card .trophy {
-    font-size: 28px;
-    margin-bottom: 4px;
-    opacity: 0.7;
-    filter: grayscale(0.3);
+    font-size: 24px;
+    margin-bottom: 6px;
+    color: var(--amber);
+    opacity: 0.5;
   }
   .champ-card .seed-label {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 10px;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--text2);
   }
   .champ-card .team-name {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 26px;
     font-weight: 800;
     letter-spacing: -0.5px;
@@ -678,7 +717,7 @@ HTML = r"""<!DOCTYPE html>
     text-align: center;
   }
   .stat-pill .stat-val {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 20px;
     font-weight: 700;
     color: var(--amber-bright);
@@ -756,7 +795,7 @@ HTML = r"""<!DOCTYPE html>
     display: inline-block;
     background: var(--red);
     color: var(--bg);
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 7px;
     font-weight: 800;
     letter-spacing: 1.5px;
@@ -781,14 +820,15 @@ HTML = r"""<!DOCTYPE html>
     width: 180px;
     height: 120px;
     margin-bottom: 24px;
-    opacity: 0.15;
+    opacity: 0.3;
+    color: var(--text2);
   }
   .empty-bracket svg {
     width: 100%;
     height: 100%;
   }
   .empty-state h2 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 18px;
     font-weight: 600;
     color: var(--text2);
@@ -816,11 +856,11 @@ HTML = r"""<!DOCTYPE html>
     border-bottom: 1px solid var(--border);
     align-items: center;
     flex-wrap: wrap;
-    background: rgba(10,14,26,0.8);
+    background: var(--bg);
   }
   .filter-bar.visible { display: flex; }
   .filter-bar .filter-label {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -873,7 +913,7 @@ HTML = r"""<!DOCTYPE html>
     padding: 8px 32px;
     align-items: center;
     border-bottom: 1px solid var(--border);
-    background: rgba(17,24,39,0.4);
+    background: var(--bg);
   }
   .featured-bar.visible { display: flex; }
   .featured-pill {
@@ -900,7 +940,7 @@ HTML = r"""<!DOCTYPE html>
     flex-shrink: 0;
   }
   .featured-pill .feat-label {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
@@ -954,12 +994,261 @@ HTML = r"""<!DOCTYPE html>
     background: var(--amber-bright);
   }
   .featured-toggle .toggle-label {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Bricolage Grotesque', sans-serif;
     font-size: 9px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: var(--text2);
     white-space: nowrap;
+  }
+
+  /* === MOBILE === */
+  @media (max-width: 768px) {
+    body { height: 100dvh; }
+
+    .header {
+      padding: 12px 16px;
+      flex-wrap: wrap;
+      gap: 2px;
+      background: linear-gradient(180deg, rgba(209,171,100,0.06) 0%, transparent 100%);
+    }
+    .header::after { left: 16px; width: 80px; }
+    .logo-icon { font-size: 11px; }
+    .header h1 { font-size: 16px; letter-spacing: -0.5px; }
+    .header h1 span { font-size: 14px; letter-spacing: 1px; }
+    .header-sub { display: none; }
+
+    .controls {
+      padding: 12px 16px;
+      gap: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .control-group:nth-child(2) { grid-column: 1 / -1; }
+    .control-group > label { font-size: 8px; letter-spacing: 1.5px; }
+    input[type="number"] {
+      width: 100%;
+      height: 40px;
+      font-size: 13px;
+      border-radius: 6px;
+    }
+    .homer-trigger {
+      min-width: 0;
+      width: 100%;
+      height: 40px;
+      border-radius: 6px;
+    }
+    .btn-generate {
+      width: 100%;
+      height: 40px;
+      border-radius: 6px;
+      font-size: 11px;
+    }
+
+    .filter-bar {
+      padding: 6px 16px;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      gap: 6px;
+      scrollbar-width: none;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-bar .filter-label { display: none; }
+    .filter-group {
+      padding: 5px 10px;
+      flex-shrink: 0;
+      border-radius: 20px;
+    }
+    .filter-group .filter-dot { width: 6px; height: 6px; }
+    .filter-group .filter-text { font-size: 9px; }
+    .filter-count { display: none; }
+
+    .featured-bar {
+      padding: 6px 16px;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      gap: 6px;
+      scrollbar-width: none;
+    }
+    .featured-bar::-webkit-scrollbar { display: none; }
+    .featured-pill {
+      flex: 0 0 auto;
+      min-width: auto;
+      padding: 7px 14px;
+      border-radius: 20px;
+    }
+    .featured-pill .feat-detail { display: none; }
+    .featured-pill .feat-label { font-size: 9px; }
+    .featured-pill .featured-pip { width: 6px; height: 6px; }
+    .featured-toggle .toggle-label { font-size: 8px; }
+
+    .chart-panel {
+      padding: 4px 8px 8px;
+      flex: 1;
+    }
+    .chart-panel::before { display: none; }
+
+    .detail-panel { display: none !important; }
+
+    .homer-dropdown {
+      position: fixed;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 60vh;
+      border-radius: 16px 16px 0 0;
+      z-index: 200;
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.6);
+    }
+    .homer-dropdown label { padding: 10px 14px; font-size: 13px; }
+    .homer-search input { height: 36px; font-size: 13px; }
+  }
+
+  /* === DETAIL OVERLAY === */
+  .detail-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: var(--bg);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .detail-overlay.open {
+    display: flex;
+    flex-direction: column;
+    animation: overlayIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes overlayIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .detail-overlay .overlay-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 52px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    flex-shrink: 0;
+  }
+  .detail-overlay .overlay-header h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .detail-overlay .overlay-close {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .detail-overlay .overlay-close:active {
+    background: var(--surface3);
+    transform: scale(0.92);
+  }
+
+  .detail-overlay .overlay-body {
+    padding: 20px 16px 100px;
+    flex: 1;
+  }
+
+  /* Overlay champion card — hero treatment */
+  .detail-overlay .champ-card {
+    padding: 28px 20px;
+    border-radius: 12px;
+    background: linear-gradient(160deg, var(--surface2) 0%, rgba(209,171,100,0.06) 100%);
+    border: 1px solid var(--border-bright);
+    position: relative;
+    overflow: hidden;
+  }
+  .detail-overlay .champ-card::after {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(209,171,100,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .detail-overlay .champ-card .trophy { font-size: 30px; }
+  .detail-overlay .champ-card .seed-label { font-size: 11px; letter-spacing: 4px; }
+  .detail-overlay .champ-card .team-name { font-size: 28px; margin: 8px 0; }
+  .detail-overlay .champ-card .win-prob { font-size: 14px; }
+
+  /* Overlay stat pills */
+  .detail-overlay .stat-row { gap: 6px; }
+  .detail-overlay .stat-pill {
+    border-radius: 8px;
+    padding: 12px 8px;
+  }
+  .detail-overlay .stat-pill .stat-val { font-size: 18px; }
+  .detail-overlay .stat-pill .stat-label { font-size: 8px; letter-spacing: 1.5px; }
+
+  /* Overlay section labels */
+  .detail-overlay .section-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin: 28px 0 12px;
+  }
+
+  /* Overlay team rows */
+  .detail-overlay .team-row {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  /* Overlay matchup rows */
+  .detail-overlay .matchup-row {
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+    margin-bottom: 2px;
+  }
+  .detail-overlay .matchup-row .stats { font-size: 11px; }
+  .detail-overlay .matchup-row.upset {
+    border-left-width: 3px;
+    border-radius: 0 6px 6px 0;
+  }
+  .detail-overlay .upset-flag {
+    font-size: 8px;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  /* Strategy tags in overlay */
+  .detail-overlay [style*="display:inline-block"] {
+    padding: 3px 10px !important;
+    border-radius: 12px !important;
+    font-size: 10px !important;
   }
 
   /* === ANIMATIONS === */
@@ -991,10 +1280,15 @@ HTML = r"""<!DOCTYPE html>
 
 <div class="header">
   <div class="logo">
-    <span class="logo-icon">///</span>
+    <i class="fa-solid fa-basketball logo-icon"></i>
     <h1>Lazy Bracket <span>Optimizer</span></h1>
   </div>
   <span class="header-sub">Torvik AdjEM + Expected Value + Pool Strategy</span>
+  <div class="header-right">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+      <i class="fa-solid fa-circle-half-stroke"></i>
+    </button>
+  </div>
 </div>
 
 <div class="controls">
@@ -1051,29 +1345,29 @@ HTML = r"""<!DOCTYPE html>
     <div class="empty-state" id="emptyState">
       <div class="empty-bracket">
         <svg viewBox="0 0 180 120" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5">
-          <line x1="10" y1="10" x2="40" y2="10" stroke="rgb(209,171,100)"/>
-          <line x1="10" y1="25" x2="40" y2="25" stroke="rgb(209,171,100)"/>
-          <line x1="40" y1="10" x2="40" y2="25" stroke="rgb(209,171,100)"/>
-          <line x1="40" y1="17" x2="70" y2="17" stroke="rgb(209,171,100)"/>
-          <line x1="10" y1="40" x2="40" y2="40" stroke="rgb(209,171,100)"/>
-          <line x1="10" y1="55" x2="40" y2="55" stroke="rgb(209,171,100)"/>
-          <line x1="40" y1="40" x2="40" y2="55" stroke="rgb(209,171,100)"/>
-          <line x1="40" y1="47" x2="70" y2="47" stroke="rgb(209,171,100)"/>
-          <line x1="70" y1="17" x2="70" y2="47" stroke="rgb(209,171,100)"/>
-          <line x1="70" y1="32" x2="100" y2="32" stroke="rgb(209,171,100)"/>
-          <line x1="10" y1="70" x2="40" y2="70" stroke="rgb(209,171,100)"/>
-          <line x1="10" y1="85" x2="40" y2="85" stroke="rgb(209,171,100)"/>
-          <line x1="40" y1="70" x2="40" y2="85" stroke="rgb(209,171,100)"/>
-          <line x1="40" y1="77" x2="70" y2="77" stroke="rgb(209,171,100)"/>
-          <line x1="10" y1="100" x2="40" y2="100" stroke="rgb(209,171,100)"/>
-          <line x1="10" y1="115" x2="40" y2="115" stroke="rgb(209,171,100)"/>
-          <line x1="40" y1="100" x2="40" y2="115" stroke="rgb(209,171,100)"/>
-          <line x1="40" y1="107" x2="70" y2="107" stroke="rgb(209,171,100)"/>
-          <line x1="70" y1="77" x2="70" y2="107" stroke="rgb(209,171,100)"/>
-          <line x1="70" y1="92" x2="100" y2="92" stroke="rgb(209,171,100)"/>
-          <line x1="100" y1="32" x2="100" y2="92" stroke="rgb(209,171,100)"/>
-          <line x1="100" y1="62" x2="130" y2="62" stroke="rgb(209,171,100)"/>
-          <circle cx="135" cy="62" r="4" fill="rgb(209,171,100)" opacity="0.3" stroke="none"/>
+          <line x1="10" y1="10" x2="40" y2="10" stroke="currentColor"/>
+          <line x1="10" y1="25" x2="40" y2="25" stroke="currentColor"/>
+          <line x1="40" y1="10" x2="40" y2="25" stroke="currentColor"/>
+          <line x1="40" y1="17" x2="70" y2="17" stroke="currentColor"/>
+          <line x1="10" y1="40" x2="40" y2="40" stroke="currentColor"/>
+          <line x1="10" y1="55" x2="40" y2="55" stroke="currentColor"/>
+          <line x1="40" y1="40" x2="40" y2="55" stroke="currentColor"/>
+          <line x1="40" y1="47" x2="70" y2="47" stroke="currentColor"/>
+          <line x1="70" y1="17" x2="70" y2="47" stroke="currentColor"/>
+          <line x1="70" y1="32" x2="100" y2="32" stroke="currentColor"/>
+          <line x1="10" y1="70" x2="40" y2="70" stroke="currentColor"/>
+          <line x1="10" y1="85" x2="40" y2="85" stroke="currentColor"/>
+          <line x1="40" y1="70" x2="40" y2="85" stroke="currentColor"/>
+          <line x1="40" y1="77" x2="70" y2="77" stroke="currentColor"/>
+          <line x1="10" y1="100" x2="40" y2="100" stroke="currentColor"/>
+          <line x1="10" y1="115" x2="40" y2="115" stroke="currentColor"/>
+          <line x1="40" y1="100" x2="40" y2="115" stroke="currentColor"/>
+          <line x1="40" y1="107" x2="70" y2="107" stroke="currentColor"/>
+          <line x1="70" y1="77" x2="70" y2="107" stroke="currentColor"/>
+          <line x1="70" y1="92" x2="100" y2="92" stroke="currentColor"/>
+          <line x1="100" y1="32" x2="100" y2="92" stroke="currentColor"/>
+          <line x1="100" y1="62" x2="130" y2="62" stroke="currentColor"/>
+          <circle cx="135" cy="62" r="4" fill="currentColor" opacity="0.3" stroke="none"/>
         </svg>
       </div>
       <h2>Configure Your Pool</h2>
@@ -1086,10 +1380,42 @@ HTML = r"""<!DOCTYPE html>
   </div>
 </div>
 
+<div class="detail-overlay" id="detailOverlay">
+  <div class="overlay-header">
+    <h2>Bracket Detail</h2>
+    <button class="overlay-close" onclick="closeOverlay()">&times;</button>
+  </div>
+  <div class="overlay-body" id="overlayBody"></div>
+</div>
+
 <script>
 let allBrackets = [];
 let teams = [];
 let featuredOnly = false;
+
+function isMobile() { return window.innerWidth <= 768; }
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  if (allBrackets.length > 0) renderChart();
+}
+
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  else {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+})();
+
+function closeOverlay() {
+  document.getElementById('detailOverlay').classList.remove('open');
+}
 
 async function loadTeams() {
   const res = await fetch('/api/teams');
@@ -1199,6 +1525,8 @@ function renderChart() {
   const plotDiv = document.getElementById('plotDiv');
   plotDiv.style.display = 'block';
 
+  const cs = getComputedStyle(document.documentElement);
+
   // Compute axis ranges from ALL brackets so scales stay fixed when filtering
   const allEarly = allBrackets.map(b => b.early_ev);
   const allLate = allBrackets.map(b => b.late_ev);
@@ -1221,7 +1549,7 @@ function renderChart() {
 
   // Color by dominant strategy
   const tagColors = {
-    'pure-ev': '#5b8def',
+    'pure-ev': '#6090c0',
     'contrarian': '#e85d5d',
     'seed-blend': '#d1ab64',
     'def-floor': '#4dd8c0',
@@ -1269,8 +1597,8 @@ function renderChart() {
         [1, '#e85d5d']
       ],
       colorbar: {
-        title: {text: 'Chalk \u2190\u2192 Chaos', font: {family: 'Outfit, sans-serif', size: 10, color: '#7a7568'}, side: 'bottom'},
-        tickfont: {family: 'JetBrains Mono, monospace', size: 9, color: '#4a453d'},
+        title: {text: 'Chalk \u2190\u2192 Chaos', font: {family: 'Bricolage Grotesque, sans-serif', size: 10, color: cs.getPropertyValue('--text2').trim()}, side: 'bottom'},
+        tickfont: {family: 'IBM Plex Mono, monospace', size: 9, color: cs.getPropertyValue('--text3').trim()},
         thickness: 8,
         len: 0.35,
         x: 0.22,
@@ -1282,34 +1610,34 @@ function renderChart() {
         borderwidth: 0,
         outlinewidth: 0
       },
-      line: {width: 1, color: 'rgba(255,255,255,0.08)'},
+      line: {width: 1, color: cs.getPropertyValue('--border').trim()},
       opacity: 0.7
     },
     text: hoverText,
-    hoverinfo: 'text',
+    hoverinfo: isMobile() ? 'none' : 'text',
     hoverlabel: {
-      bgcolor: '#111827',
-      bordercolor: 'rgba(209,171,100,0.25)',
-      font: {family: 'JetBrains Mono, monospace', size: 11, color: '#e8e2d6'}
+      bgcolor: cs.getPropertyValue('--hover-bg').trim(),
+      bordercolor: cs.getPropertyValue('--border-bright').trim(),
+      font: {family: 'IBM Plex Mono, monospace', size: 11, color: cs.getPropertyValue('--text').trim()}
     },
     customdata: customData
   };
 
   const layout = {
     paper_bgcolor: 'rgba(0,0,0,0)',
-    plot_bgcolor: 'rgba(17,24,39,0.4)',
-    font: {family: 'JetBrains Mono, monospace', color: '#4a453d'},
+    plot_bgcolor: cs.getPropertyValue('--plot-bg').trim(),
+    font: {family: 'IBM Plex Mono, monospace', color: cs.getPropertyValue('--text3').trim()},
     xaxis: {
-      title: {text: 'Early Rounds EV (R64 + R32)', font: {family: 'Outfit, sans-serif', size: 11, color: '#7a7568'}},
-      gridcolor: 'rgba(209,171,100,0.06)',
-      zerolinecolor: 'rgba(209,171,100,0.06)',
+      title: {text: 'Early Rounds EV (R64 + R32)', font: {family: 'Bricolage Grotesque, sans-serif', size: 11, color: cs.getPropertyValue('--text2').trim()}},
+      gridcolor: cs.getPropertyValue('--plot-grid').trim(),
+      zerolinecolor: cs.getPropertyValue('--plot-grid').trim(),
       tickfont: {size: 10},
       range: axisRanges.x
     },
     yaxis: {
-      title: {text: 'Late Rounds EV (S16 through Championship)', font: {family: 'Outfit, sans-serif', size: 11, color: '#7a7568'}},
-      gridcolor: 'rgba(209,171,100,0.06)',
-      zerolinecolor: 'rgba(209,171,100,0.06)',
+      title: {text: 'Late Rounds EV (S16 through Championship)', font: {family: 'Bricolage Grotesque, sans-serif', size: 11, color: cs.getPropertyValue('--text2').trim()}},
+      gridcolor: cs.getPropertyValue('--plot-grid').trim(),
+      zerolinecolor: cs.getPropertyValue('--plot-grid').trim(),
       tickfont: {size: 10},
       range: axisRanges.y
     },
@@ -1322,7 +1650,7 @@ function renderChart() {
     safest:   {color: '#4dd8c0', label: 'Safest',    desc: 'Highest EV'},
     historic: {color: '#8b90a5', label: 'Historic',   desc: 'Norm upsets'},
     balanced: {color: '#d1ab64', label: 'Balanced',   desc: 'Best of both'},
-    sleeper:  {color: '#5b8def', label: 'Sleeper',    desc: 'Late upside'},
+    sleeper:  {color: '#6090c0', label: 'Sleeper',    desc: 'Late upside'},
     riskiest: {color: '#e85d5d', label: 'Riskiest',   desc: 'Max chaos'}
   };
 
@@ -1363,14 +1691,14 @@ function renderChart() {
         x: b.early_ev,
         y: b.late_ev,
         text: m.label.toUpperCase(),
-        font: {family: 'Outfit, sans-serif', size: 9, color: m.color},
+        font: {family: 'Bricolage Grotesque, sans-serif', size: 9, color: m.color},
         showarrow: true,
         arrowhead: 0,
         arrowwidth: 1.5,
         arrowcolor: m.color,
         ax: dirs[0],
         ay: dirs[1],
-        bgcolor: 'rgba(10,14,26,0.9)',
+        bgcolor: cs.getPropertyValue('--bg').trim(),
         bordercolor: m.color,
         borderwidth: 1,
         borderpad: 3
@@ -1393,21 +1721,22 @@ function renderChart() {
 function showDetail(bracket) {
   const panel = document.getElementById('detailPanel');
   panel.classList.remove('collapsed');
+  const mobile = isMobile();
 
   const tagColorMap = {
-    'pure-ev': '#5b8def', 'contrarian': '#e85d5d',
+    'pure-ev': '#6090c0', 'contrarian': '#e85d5d',
     'seed-blend': '#d1ab64', 'def-floor': '#4dd8c0', 'upset-boost': '#c084fc'
   };
   const tagsHtml = (bracket.strategy_tags || []).map(tag =>
-    `<span style="display:inline-block;background:${tagColorMap[tag]||'#555'};color:#0a0e1a;padding:2px 8px;border-radius:2px;font-size:9px;font-family:Outfit,sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase">${tag}</span>`
+    `<span style="display:inline-block;background:${tagColorMap[tag]||'#555'};color:#fff;padding:2px 8px;border-radius:2px;font-size:9px;font-family:Bricolage Grotesque,sans-serif;font-weight:700;letter-spacing:1px;text-transform:uppercase">${tag}</span>`
   ).join(' ');
 
   let html = `
     <div class="champ-card">
-      <div class="trophy">&#127942;</div>
+      <div class="trophy"><i class="fa-solid fa-trophy"></i></div>
       <div class="seed-label">${bracket.champion.seed}-seed</div>
       <div class="team-name">${bracket.champion.name}</div>
-      <div class="win-prob">${bracket.champion.prob}% to win it all</div>
+      <div class="win-prob"><i class="fa-solid fa-bullseye" style="margin-right:4px;font-size:10px;opacity:0.6"></i>${bracket.champion.prob}% to win it all</div>
     </div>
     <div style="display:flex;gap:4px;flex-wrap:wrap;margin:10px 0 4px">${tagsHtml}</div>
     <div class="stat-row">
@@ -1459,7 +1788,7 @@ function showDetail(bracket) {
     html += `<div class="section-label">${rname}</div><div class="round-section">`;
     games.forEach(g => {
       const cls = g.upset ? 'matchup-row upset' : 'matchup-row';
-      const flag = g.upset ? '<span class="upset-flag">Upset</span>' : '';
+      const flag = '';
       html += `<div class="${cls}">
         <span class="matchup-teams"><span class="pick">${g.pick}</span>${flag}<span class="vs">over</span><span class="loser">${g.opponent}</span></span>
         <span class="stats">${g.prob}%&ensp;${g.ev}ev</span>
@@ -1468,11 +1797,24 @@ function showDetail(bracket) {
     html += '</div>';
   }
 
-  document.getElementById('detailContent').innerHTML = html;
-  setTimeout(() => Plotly.Plots.resize(document.getElementById('plotDiv')), 300);
+  if (mobile) {
+    document.getElementById('overlayBody').innerHTML = html;
+    document.getElementById('detailOverlay').classList.add('open');
+  } else {
+    document.getElementById('detailContent').innerHTML = html;
+    setTimeout(() => Plotly.Plots.resize(document.getElementById('plotDiv')), 300);
+  }
 }
 
 loadTeams();
+
+// Resize chart on orientation change / window resize
+window.addEventListener('resize', () => {
+  const plotDiv = document.getElementById('plotDiv');
+  if (plotDiv && plotDiv.style.display !== 'none') {
+    Plotly.Plots.resize(plotDiv);
+  }
+});
 </script>
 </body>
 </html>
