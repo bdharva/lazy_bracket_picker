@@ -19,27 +19,24 @@ class Matchup:
 		self.team_2 = team_2
 
 		if strategy == 'team':
-			self.team_1_odds = team_odds[team_1.team_id][self.tourney_round]
-			self.team_2_odds = team_odds[team_2.team_id][self.tourney_round]
+			self.team_1_odds = team_odds[str(team_1.team_id)][self.tourney_round]
+			self.team_2_odds = team_odds[str(team_2.team_id)][self.tourney_round]
 		
 		elif strategy == 'seed':
 			self.team_1_odds = seed_odds[team_1.seed][self.tourney_round]
 			self.team_2_odds = seed_odds[team_2.seed][self.tourney_round]
 
 		elif strategy == 'hybrid':
-			self.team_1_odds = team_odds[team_1.team_id][self.tourney_round] + seed_odds[team_1.seed][self.tourney_round]
-			self.team_2_odds = team_odds[team_2.team_id][self.tourney_round] + seed_odds[team_2.seed][self.tourney_round]
+			self.team_1_odds = team_odds[str(team_1.team_id)][self.tourney_round] + seed_odds[team_1.seed][self.tourney_round]
+			self.team_2_odds = team_odds[str(team_2.team_id)][self.tourney_round] + seed_odds[team_2.seed][self.tourney_round]
 
-		try:
-			self.team_1_odds = self.team_1_odds / (self.team_1_odds + self.team_2_odds)
+		total_odds = self.team_1_odds + self.team_2_odds
 
-		except ZeroDivisionError:
+		if total_odds > 0:
+			self.team_1_odds = self.team_1_odds / total_odds
+			self.team_2_odds = self.team_2_odds / total_odds
+		else:
 			self.team_1_odds = 0
-
-		try:
-			self.team_2_odds = self.team_2_odds / (self.team_1_odds + self.team_2_odds)
-
-		except ZeroDivisionError:
 			self.team_2_odds = 0
 
 		self.team_1_score = 0
